@@ -54,7 +54,6 @@ use std::{
 use tokio::{
     net::UdpSocket,
     sync::{mpsc, oneshot},
-    time,
 };
 use tracing::{debug, error, trace};
 
@@ -94,7 +93,7 @@ async fn dht_handler(
         );
         trace!(?now, ?timeout_deadline, "polling");
 
-        let sleep = time::sleep_until(timeout_deadline);
+        let sleep = tokio::time::sleep_until(timeout_deadline);
         tokio::pin!(sleep);
 
         tokio::select! {
@@ -1334,7 +1333,7 @@ mod routing {
     {
         let mut nodes = table
             .iter()
-            .flat_map(cloudburst::dht::routing::Bucket::iter)
+            .flat_map(Bucket::iter)
             .map(|n| n.addr_id().clone())
             // .flat_map(|b| b.prioritized_nodes(now.clone()).cloned())
             .collect::<Vec<_>>();

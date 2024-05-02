@@ -109,7 +109,7 @@ async fn main() -> io::Result<()> {
 
     let config = get_config(LocalId::from(local_id));
     let node: Node<SocketAddrV4> =
-        dht::Node::new(config, std::iter::empty(), args.bootstrap, Instant::now());
+        Node::new(config, std::iter::empty(), args.bootstrap, Instant::now());
 
     let (dht_cmd_tx, dht_cmd_rx) = mpsc::channel(32);
     let (dht_completion_tx, dht_completion_rx) = oneshot::channel();
